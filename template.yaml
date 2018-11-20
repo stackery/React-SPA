@@ -20,6 +20,14 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+      Events:
+        objectStore3B690123:
+          Type: S3
+          Properties:
+            Bucket: !Ref objectStore3B690123
+            Events:
+              - s3:ObjectCreated:*
+              - s3:ObjectRemoved:*
 Parameters:
   StackeryStackTagName:
     Type: String
