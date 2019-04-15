@@ -1,240 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  tableEDBA04D3:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
-      TableName: !Sub ${AWS::StackName}-tableEDBA04D3
-  virtualNetwork5D5AFF5B:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName}
-            - ResourceName: virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPrivateSubnet1:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Select
-        - 0
-        - !Cidr
-          - 10.0.0.0/16
-          - 4
-          - 14
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 1
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPrivateSubnet2:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select
-        - 1
-        - !GetAZs ''
-      CidrBlock: !Select
-        - 1
-        - !Cidr
-          - 10.0.0.0/16
-          - 4
-          - 14
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 2
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPublicSubnet1:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select
-        - 0
-        - !GetAZs ''
-      CidrBlock: !Select
-        - 2
-        - !Cidr
-          - 10.0.0.0/16
-          - 4
-          - 14
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnet 1
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPublicSubnet2:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Select
-        - 1
-        - !GetAZs ''
-      CidrBlock: !Select
-        - 3
-        - !Cidr
-          - 10.0.0.0/16
-          - 4
-          - 14
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnet 2
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPrivateSubnet1NatGatewayEIP:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  virtualNetwork5D5AFF5BPrivateSubnet1NatGateway:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt virtualNetwork5D5AFF5BPrivateSubnet1NatGatewayEIP.AllocationId
-      SubnetId: !Ref virtualNetwork5D5AFF5BPublicSubnet1
-  virtualNetwork5D5AFF5BPrivateSubnet1RouteTable:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 1 Route Table
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPrivateSubnet1NatGatewayRoute:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Route
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref virtualNetwork5D5AFF5BPrivateSubnet1NatGateway
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPrivateSubnet1RouteTable
-  virtualNetwork5D5AFF5BPrivateSubnet1RouteTableAssociation:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPrivateSubnet1RouteTable
-      SubnetId: !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-  virtualNetwork5D5AFF5BPrivateSubnet2NatGatewayEIP:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  virtualNetwork5D5AFF5BPrivateSubnet2NatGateway:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt virtualNetwork5D5AFF5BPrivateSubnet2NatGatewayEIP.AllocationId
-      SubnetId: !Ref virtualNetwork5D5AFF5BPublicSubnet2
-  virtualNetwork5D5AFF5BPrivateSubnet2RouteTable:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 2 Route Table
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPrivateSubnet2NatGatewayRoute:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Route
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref virtualNetwork5D5AFF5BPrivateSubnet2NatGateway
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPrivateSubnet2RouteTable
-  virtualNetwork5D5AFF5BPrivateSubnet2RouteTableAssociation:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPrivateSubnet2RouteTable
-      SubnetId: !Ref virtualNetwork5D5AFF5BPrivateSubnet2
-  virtualNetwork5D5AFF5BPublicSubnetsInternetGateway:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnets Internet Gateway
-            - ResourceName: virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPublicSubnetsInternetGatewayAttachment:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      InternetGatewayId: !Ref virtualNetwork5D5AFF5BPublicSubnetsInternetGateway
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPublicSubnetsRouteTable:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub
-            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnets Route Table
-            - ResourceName: virtualNetwork5D5AFF5B
-      VpcId: !Ref virtualNetwork5D5AFF5B
-  virtualNetwork5D5AFF5BPublicSubnetsInternetGatewayRoute:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::Route
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref virtualNetwork5D5AFF5BPublicSubnetsInternetGateway
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPublicSubnetsRouteTable
-  virtualNetwork5D5AFF5BPublicSubnet1RouteTableAssociation:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPublicSubnetsRouteTable
-      SubnetId: !Ref virtualNetwork5D5AFF5BPublicSubnet1
-  virtualNetwork5D5AFF5BPublicSubnet2RouteTableAssociation:
-    Metadata:
-      StackeryManaged: true
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref virtualNetwork5D5AFF5BPublicSubnetsRouteTable
-      SubnetId: !Ref virtualNetwork5D5AFF5BPublicSubnet2
   bastion60C3F489:
     Type: AWS::AutoScaling::AutoScalingGroup
     Metadata:
@@ -251,8 +17,8 @@ Resources:
             - ResourceName: bastion60C3F489
           PropagateAtLaunch: true
       VPCZoneIdentifier:
-        - !Ref virtualNetwork5D5AFF5BPublicSubnet1
-        - !Ref virtualNetwork5D5AFF5BPublicSubnet2
+        - !Ref secureCrudVpcPublicSubnet1
+        - !Ref secureCrudVpcPublicSubnet2
     UpdatePolicy:
       AutoScalingRollingUpdate:
         MinInstancesInService: 1
@@ -310,7 +76,7 @@ Resources:
           Value: !Sub
             - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Bastion ${ResourceName} Instances Security Group
             - ResourceName: bastion60C3F489
-      VpcId: !Ref virtualNetwork5D5AFF5B
+      VpcId: !Ref secureCrudVpc
   bastion60C3F489LaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -465,7 +231,7 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
+            TableName: !Ref Users
         - AWSLambdaENIManagementAccess
       Events:
         crudApiPUTuserid:
@@ -476,14 +242,14 @@ Resources:
             RestApiId: !Ref crudApi
       Environment:
         Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+          TABLE_NAME: !Ref Users
+          TABLE_ARN: !GetAtt Users.Arn
       VpcConfig:
         SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+          - !GetAtt secureCrudVpc.DefaultSecurityGroup
         SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+          - !Ref secureCrudVpcPrivateSubnet1
+          - !Ref secureCrudVpcPrivateSubnet2
     Metadata:
       StackeryName: updateUser
   getUsers:
@@ -502,7 +268,7 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
+            TableName: !Ref Users
         - AWSLambdaENIManagementAccess
       Events:
         crudApiGET:
@@ -513,14 +279,14 @@ Resources:
             RestApiId: !Ref crudApi
       Environment:
         Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+          TABLE_NAME: !Ref Users
+          TABLE_ARN: !GetAtt Users.Arn
       VpcConfig:
         SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+          - !GetAtt secureCrudVpc.DefaultSecurityGroup
         SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+          - !Ref secureCrudVpcPrivateSubnet1
+          - !Ref secureCrudVpcPrivateSubnet2
     Metadata:
       StackeryName: getUsers
   deleteUser:
@@ -539,7 +305,7 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
+            TableName: !Ref Users
         - AWSLambdaENIManagementAccess
       Events:
         crudApiDELETEuserid:
@@ -550,14 +316,14 @@ Resources:
             RestApiId: !Ref crudApi
       Environment:
         Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+          TABLE_NAME: !Ref Users
+          TABLE_ARN: !GetAtt Users.Arn
       VpcConfig:
         SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+          - !GetAtt secureCrudVpc.DefaultSecurityGroup
         SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+          - !Ref secureCrudVpcPrivateSubnet1
+          - !Ref secureCrudVpcPrivateSubnet2
     Metadata:
       StackeryName: deleteUser
   addUser:
@@ -576,7 +342,7 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
+            TableName: !Ref Users
         - AWSLambdaENIManagementAccess
       Events:
         crudApiPOSTuserid:
@@ -587,16 +353,254 @@ Resources:
             RestApiId: !Ref crudApi
       Environment:
         Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+          TABLE_NAME: !Ref Users
+          TABLE_ARN: !GetAtt Users.Arn
       VpcConfig:
         SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+          - !GetAtt secureCrudVpc.DefaultSecurityGroup
         SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+          - !Ref secureCrudVpcPrivateSubnet1
+          - !Ref secureCrudVpcPrivateSubnet2
     Metadata:
       StackeryName: addUser
+  Users:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: !Sub ${AWS::StackName}-Users
+    Metadata:
+      StackeryName: Users
+  secureCrudVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName}
+            - ResourceName: secureCrudVpc
+    Metadata:
+      StackeryName: secureCrudVpc
+  secureCrudVpcPrivateSubnet1:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Select
+        - 0
+        - !Cidr
+          - 10.0.0.0/16
+          - 4
+          - 14
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 1
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPrivateSubnet2:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
+      CidrBlock: !Select
+        - 1
+        - !Cidr
+          - 10.0.0.0/16
+          - 4
+          - 14
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 2
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPublicSubnet1:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs ''
+      CidrBlock: !Select
+        - 2
+        - !Cidr
+          - 10.0.0.0/16
+          - 4
+          - 14
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnet 1
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPublicSubnet2:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs ''
+      CidrBlock: !Select
+        - 3
+        - !Cidr
+          - 10.0.0.0/16
+          - 4
+          - 14
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnet 2
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPrivateSubnet1NatGateway:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt secureCrudVpcPrivateSubnet1NatGatewayEIP.AllocationId
+      SubnetId: !Ref secureCrudVpcPublicSubnet1
+  secureCrudVpcPrivateSubnet1NatGatewayEIP:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  secureCrudVpcPrivateSubnet1NatGatewayRoute:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref secureCrudVpcPrivateSubnet1NatGateway
+      RouteTableId: !Ref secureCrudVpcPrivateSubnet1RouteTable
+  secureCrudVpcPrivateSubnet1RouteTable:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 1 Route Table
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPrivateSubnet1RouteTableAssociation:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref secureCrudVpcPrivateSubnet1RouteTable
+      SubnetId: !Ref secureCrudVpcPrivateSubnet1
+  secureCrudVpcPrivateSubnet2NatGateway:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt secureCrudVpcPrivateSubnet2NatGatewayEIP.AllocationId
+      SubnetId: !Ref secureCrudVpcPublicSubnet2
+  secureCrudVpcPrivateSubnet2NatGatewayEIP:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  secureCrudVpcPrivateSubnet2NatGatewayRoute:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref secureCrudVpcPrivateSubnet2NatGateway
+      RouteTableId: !Ref secureCrudVpcPrivateSubnet2RouteTable
+  secureCrudVpcPrivateSubnet2RouteTable:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Private Subnet 2 Route Table
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPrivateSubnet2RouteTableAssociation:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref secureCrudVpcPrivateSubnet2RouteTable
+      SubnetId: !Ref secureCrudVpcPrivateSubnet2
+  secureCrudVpcPublicSubnetsInternetGatewayAttachment:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref secureCrudVpcPublicSubnetsInternetGateway
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPublicSubnetsInternetGateway:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnets Internet Gateway
+            - ResourceName: secureCrudVpc
+  secureCrudVpcPublicSubnetsInternetGatewayRoute:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref secureCrudVpcPublicSubnetsInternetGateway
+      RouteTableId: !Ref secureCrudVpcPublicSubnetsRouteTable
+  secureCrudVpcPublicSubnetsRouteTable:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Virtual Network ${ResourceName} Public Subnets Route Table
+            - ResourceName: secureCrudVpc
+      VpcId: !Ref secureCrudVpc
+  secureCrudVpcPublicSubnet1RouteTableAssociation:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref secureCrudVpcPublicSubnetsRouteTable
+      SubnetId: !Ref secureCrudVpcPublicSubnet1
+  secureCrudVpcPublicSubnet2RouteTableAssociation:
+    Metadata:
+      StackeryManaged: true
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref secureCrudVpcPublicSubnetsRouteTable
+      SubnetId: !Ref secureCrudVpcPublicSubnet2
 Parameters:
   StackeryStackTagName:
     Type: String
