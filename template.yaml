@@ -1,146 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  functionA7898650:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-functionA7898650
-      Description: !Sub
-        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: functionA7898650
-      CodeUri: src/functionA7898650
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
-        - AWSLambdaENIManagementAccess
-      Events:
-        crudApiPOSTuserid:
-          Type: Api
-          Properties:
-            Path: /user/{id}
-            Method: POST
-            RestApiId: !Ref crudApi
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
-      VpcConfig:
-        SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
-        SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
-  functionCF6B368D:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-functionCF6B368D
-      Description: !Sub
-        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: functionCF6B368D
-      CodeUri: src/functionCF6B368D
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
-        - AWSLambdaENIManagementAccess
-      Events:
-        crudApiDELETEuserid:
-          Type: Api
-          Properties:
-            Path: /user/{id}
-            Method: DELETE
-            RestApiId: !Ref crudApi
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
-      VpcConfig:
-        SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
-        SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
-  function5E442ECE:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-function5E442ECE
-      Description: !Sub
-        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: function5E442ECE
-      CodeUri: src/function5E442ECE
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
-        - AWSLambdaENIManagementAccess
-      Events:
-        crudApiGET:
-          Type: Api
-          Properties:
-            Path: /
-            Method: GET
-            RestApiId: !Ref crudApi
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
-      VpcConfig:
-        SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
-        SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
-  function4A76724B:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-function4A76724B
-      Description: !Sub
-        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: function4A76724B
-      CodeUri: src/function4A76724B
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDBA04D3
-        - AWSLambdaENIManagementAccess
-      Events:
-        crudApiPUTuserid:
-          Type: Api
-          Properties:
-            Path: /user/{id}
-            Method: PUT
-            RestApiId: !Ref crudApi
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref tableEDBA04D3
-          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
-      VpcConfig:
-        SecurityGroupIds:
-          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
-        SubnetIds:
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
-          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
   tableEDBA04D3:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -565,30 +425,178 @@ Resources:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function5E442ECE.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getUsers.Arn}/invocations
               responses: {}
           /user/{id}:
             put:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function4A76724B.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${updateUser.Arn}/invocations
               responses: {}
             post:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionA7898650.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${addUser.Arn}/invocations
               responses: {}
             delete:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionCF6B368D.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${deleteUser.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
     Metadata:
       StackeryName: crudApi
+  updateUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-updateUser
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: updateUser
+      CodeUri: src/updateUser
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDBA04D3
+        - AWSLambdaENIManagementAccess
+      Events:
+        crudApiPUTuserid:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: PUT
+            RestApiId: !Ref crudApi
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref tableEDBA04D3
+          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+        SubnetIds:
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+    Metadata:
+      StackeryName: updateUser
+  getUsers:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-getUsers
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: getUsers
+      CodeUri: src/getUsers
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDBA04D3
+        - AWSLambdaENIManagementAccess
+      Events:
+        crudApiGET:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+            RestApiId: !Ref crudApi
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref tableEDBA04D3
+          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+        SubnetIds:
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+    Metadata:
+      StackeryName: getUsers
+  deleteUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-deleteUser
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: deleteUser
+      CodeUri: src/deleteUser
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDBA04D3
+        - AWSLambdaENIManagementAccess
+      Events:
+        crudApiDELETEuserid:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: DELETE
+            RestApiId: !Ref crudApi
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref tableEDBA04D3
+          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+        SubnetIds:
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+    Metadata:
+      StackeryName: deleteUser
+  addUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-addUser
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: addUser
+      CodeUri: src/addUser
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDBA04D3
+        - AWSLambdaENIManagementAccess
+      Events:
+        crudApiPOSTuserid:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: POST
+            RestApiId: !Ref crudApi
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref tableEDBA04D3
+          TABLE_ARN: !GetAtt tableEDBA04D3.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt virtualNetwork5D5AFF5B.DefaultSecurityGroup
+        SubnetIds:
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet1
+          - !Ref virtualNetwork5D5AFF5BPrivateSubnet2
+    Metadata:
+      StackeryName: addUser
 Parameters:
   StackeryStackTagName:
     Type: String
