@@ -1,44 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  apiDDCAC201:
-    Type: AWS::Serverless::Api
-    Properties:
-      Name: !Sub
-        - ${ResourceName} From Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName}
-        - ResourceName: apiDDCAC201
-      StageName: !Ref StackeryEnvironmentAPIGatewayStageName
-      DefinitionBody:
-        openapi: '3.0'
-        info: {}
-        paths:
-          /:
-            get:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function5E442ECE.Arn}/invocations
-              responses: {}
-          /user/{id}:
-            put:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function4A76724B.Arn}/invocations
-              responses: {}
-            post:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionA7898650.Arn}/invocations
-              responses: {}
-            delete:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionCF6B368D.Arn}/invocations
-              responses: {}
-      EndpointConfiguration: REGIONAL
   functionA7898650:
     Type: AWS::Serverless::Function
     Properties:
@@ -58,12 +20,12 @@ Resources:
             TableName: !Ref tableEDBA04D3
         - AWSLambdaENIManagementAccess
       Events:
-        apiDDCAC201POSTuserid:
+        crudApiPOSTuserid:
           Type: Api
           Properties:
             Path: /user/{id}
             Method: POST
-            RestApiId: !Ref apiDDCAC201
+            RestApiId: !Ref crudApi
       Environment:
         Variables:
           TABLE_NAME: !Ref tableEDBA04D3
@@ -93,12 +55,12 @@ Resources:
             TableName: !Ref tableEDBA04D3
         - AWSLambdaENIManagementAccess
       Events:
-        apiDDCAC201DELETEuserid:
+        crudApiDELETEuserid:
           Type: Api
           Properties:
             Path: /user/{id}
             Method: DELETE
-            RestApiId: !Ref apiDDCAC201
+            RestApiId: !Ref crudApi
       Environment:
         Variables:
           TABLE_NAME: !Ref tableEDBA04D3
@@ -128,12 +90,12 @@ Resources:
             TableName: !Ref tableEDBA04D3
         - AWSLambdaENIManagementAccess
       Events:
-        apiDDCAC201GET:
+        crudApiGET:
           Type: Api
           Properties:
             Path: /
             Method: GET
-            RestApiId: !Ref apiDDCAC201
+            RestApiId: !Ref crudApi
       Environment:
         Variables:
           TABLE_NAME: !Ref tableEDBA04D3
@@ -163,12 +125,12 @@ Resources:
             TableName: !Ref tableEDBA04D3
         - AWSLambdaENIManagementAccess
       Events:
-        apiDDCAC201PUTuserid:
+        crudApiPUTuserid:
           Type: Api
           Properties:
             Path: /user/{id}
             Method: PUT
-            RestApiId: !Ref apiDDCAC201
+            RestApiId: !Ref crudApi
       Environment:
         Variables:
           TABLE_NAME: !Ref tableEDBA04D3
@@ -587,6 +549,46 @@ Resources:
 
             --==BOUNDARY==
           - SSHKeys: '{"<username1>":"<public key>","<username2>":"<public key>"}'
+  crudApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName}
+        - ResourceName: crudApi
+      StageName: !Ref StackeryEnvironmentAPIGatewayStageName
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function5E442ECE.Arn}/invocations
+              responses: {}
+          /user/{id}:
+            put:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function4A76724B.Arn}/invocations
+              responses: {}
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionA7898650.Arn}/invocations
+              responses: {}
+            delete:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionCF6B368D.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+    Metadata:
+      StackeryName: crudApi
 Parameters:
   StackeryStackTagName:
     Type: String
